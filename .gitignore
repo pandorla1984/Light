@@ -161,3 +161,15 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+#ignore thumbnails created by windows
+#Ignore files build by Visual Studio
+*.exe
+*.cache
+*.log
+[Dd]ebug*/
+*.lib
+obj/
+[Rr]elease*/
+_ReSharper*/
+[Tt]est[Rr]esult*
