@@ -23,6 +23,7 @@ namespace Light
         public MainWindow()
         {
             InitializeComponent();
+            
         }
     }
 }
