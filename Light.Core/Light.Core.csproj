@@ -45,6 +45,14 @@
     <Compile Include="LightModule.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageBus.cs" />
+    <Compile Include="Events\LightEvent.cs" />
+    <Compile Include="Events\LightEventLevel.cs" />
+    <Compile Include="Events\LightEvents.cs" />
+    <Compile Include="Events\LightEventType.cs" />
+    <Compile Include="IConfigProvider.cs" />
+    <Compile Include="IDomainProvider.cs" />
+    <Compile Include="ILogProvider.cs" />
+    <Compile Include="INavigatorProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
