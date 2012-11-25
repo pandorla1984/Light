@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,10 +11,8 @@ namespace Light.Core
     public class Bootstrapper
     {
         #region Properties
-        ILogProvider logProvider;
-        IConfigProvider configProvider;
-        IDomainProvider domainProvider;
-        INavigatorProvider viewNavProvider;
+        public MessageBus MessageBus { get; set; }
+        public List<LightModule> Modules { get; set; }
         #endregion
 
         /// <summary>
@@ -21,41 +21,39 @@ namespace Light.Core
         /// <param name="Args">Application init args</param>
         public Bootstrapper(string[] Args)
         {
-            
+            MessageBus = new MessageBus();
+            Modules = new List<LightModule>();
+            LoadAssemblies();
+            MessageBus.Run();
+        }
+
+        private void LoadAssemblies()
+        {
+            var modulePathString = AppDomain.CurrentDomain.BaseDirectory + "Modules\\";
+            DirectoryInfo di = new DirectoryInfo(modulePathString);
+            if (di.Exists)
+            {
+                var assemblies = di.GetFiles();
+                assemblies.Select(ass =>
+                {
+                    var a = Assembly.LoadFrom(ass.FullName);
+
+                    //find and initialize modules, pass messagebus to it.
+                    Modules.AddRange(a.DefinedTypes.Where(t => t.BaseType == typeof(LightModule)).Select(t =>
+                    {
+                        return (LightModule)Activator.CreateInstance(t.DeclaringType, MessageBus);
+                    }));
+
+                    //find receivers and added into message bus
+                    var receivers = Modules.Where(m => m is IMessageReceiver).Select(m => (IMessageReceiver)m).ToList();
+                    MessageBus.Receivers.AddRange(receivers);
+                    return true;
+                }).AsParallel();
+            }
         }
 
         #region Init Implementations
-        /// <summary>
-        /// Init log provider
-        /// </summary>
-        /// <param name="provider">ILogProvider</param>
-        private void InitLog(ILogProvider provider)
-        {
-        }
 
-        /// <summary>
-        /// Init configuration provider
-        /// </summary>
-        /// <param name="provider">IConfigProvider</param>
-        private void InitConfigurations(IConfigProvider provider)
-        {
-        }
-
-        /// <summary>
-        /// Init domain provider
-        /// </summary>
-        /// <param name="provider">IDomainProvider</param>
-        private void InitDomains(IDomainProvider provider)
-        {
-        }
-
-        /// <summary>
-        /// Init view navigator provider
-        /// </summary>
-        /// <param name="viewProvider">IViewNavigatorProvider</param>
-        private void InitViewNavigator(INavigatorProvider viewProvider)
-        {
-        }
         #endregion
     }
 }

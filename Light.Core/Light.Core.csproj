@@ -40,10 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="IConfigProvider.cs" />
-    <Compile Include="IDomainProvider.cs" />
-    <Compile Include="ILogProvider.cs" />
-    <Compile Include="IViewNavigatorProvider.cs" />
+    <Compile Include="CONSTS.cs" />
+    <Compile Include="IMessageReceiver.cs" />
+    <Compile Include="LightModule.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageBus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
